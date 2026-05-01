@@ -1,0 +1,12 @@
+
+
+POST http://localhost:5299/api/auth/login
+
+Content-Type: application/json
+{
+    Email:"user@admin.com",
+    Password:"adminpass0"
+}
+
+
+GET  http://localhost:5299/api/helpdesk/all/tickets
