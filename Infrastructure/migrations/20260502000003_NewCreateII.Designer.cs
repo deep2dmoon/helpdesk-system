@@ -11,8 +11,8 @@ using helpdesk.infrastructure;
 namespace _.infrastructure.migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20260501064245_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260502000003_NewCreateII")]
+    partial class NewCreateII
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,12 +40,17 @@ namespace _.infrastructure.migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TicketChatID")
+                    b.Property<int?>("TicketChatID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TicketID")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("MessageID");
 
                     b.HasIndex("TicketChatID");
+
+                    b.HasIndex("TicketID");
 
                     b.ToTable("Messages");
                 });
@@ -58,13 +63,8 @@ namespace _.infrastructure.migrations
                     b.Property<string>("Attendant")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConversationID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -79,7 +79,7 @@ namespace _.infrastructure.migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ConversationID");
+                    b.HasIndex("CategoryID");
 
                     b.ToTable("Tickets");
                 });
@@ -120,8 +120,11 @@ namespace _.infrastructure.migrations
 
             modelBuilder.Entity("helpdesk.Entities.TicketChat", b =>
                 {
-                    b.Property<string>("ID")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.HasKey("ID");
 
@@ -130,11 +133,8 @@ namespace _.infrastructure.migrations
 
             modelBuilder.Entity("helpdesk.Entities.User", b =>
                 {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -158,7 +158,7 @@ namespace _.infrastructure.migrations
                     b.HasData(
                         new
                         {
-                            UserId = 1,
+                            UserId = "Admin-userID",
                             Email = "user@admin.com",
                             FullName = "John Doe",
                             Password = "adminpass",
@@ -171,16 +171,25 @@ namespace _.infrastructure.migrations
                     b.HasOne("helpdesk.Entities.TicketChat", null)
                         .WithMany("Messages")
                         .HasForeignKey("TicketChatID");
+
+                    b.HasOne("helpdesk.Entities.Ticket", null)
+                        .WithMany("Conversation")
+                        .HasForeignKey("TicketID");
                 });
 
             modelBuilder.Entity("helpdesk.Entities.Ticket", b =>
                 {
-                    b.HasOne("helpdesk.Entities.TicketChat", "Conversation")
+                    b.HasOne("helpdesk.Entities.TicketCategory", "Category")
                         .WithMany()
-                        .HasForeignKey("ConversationID")
+                        .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("helpdesk.Entities.Ticket", b =>
+                {
                     b.Navigation("Conversation");
                 });
 

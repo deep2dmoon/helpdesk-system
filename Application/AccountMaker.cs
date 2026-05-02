@@ -1,5 +1,6 @@
 using helpdesk.DTOs;
 using helpdesk.Entities;
+using helpdesk.Helper;
 using helpdesk.infrastructure;
 
 namespace helpdesk.Application;
@@ -11,6 +12,7 @@ public class AccountMaker(DatabaseContext _context)
     {
         User NewAccount = new()
         {
+            UserId = UniqueID.GenerateUID(),
             Email = newAccountDTO.Email,
             FullName = newAccountDTO.FullName,
             Password = newAccountDTO.Password,

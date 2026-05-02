@@ -7,7 +7,7 @@
 namespace _.infrastructure.migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class newCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,7 +29,8 @@ namespace _.infrastructure.migrations
                 name: "TicketChats",
                 columns: table => new
                 {
-                    ID = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
                 },
                 constraints: table =>
                 {
@@ -40,8 +41,7 @@ namespace _.infrastructure.migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -60,7 +60,7 @@ namespace _.infrastructure.migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Sender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MessageData = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TicketChatID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    TicketChatID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -79,14 +79,20 @@ namespace _.infrastructure.migrations
                     ID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Issuer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Attendant = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConversationID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ConversationID = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryID = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tickets", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Tickets_TicketCategories_CategoryID",
+                        column: x => x.CategoryID,
+                        principalTable: "TicketCategories",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Tickets_TicketChats_ConversationID",
                         column: x => x.ConversationID,
@@ -108,12 +114,17 @@ namespace _.infrastructure.migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Email", "FullName", "Password", "Role" },
-                values: new object[] { 1, "user@admin.com", "John Doe", "adminpass", "Admin" });
+                values: new object[] { "Admin-userID", "user@admin.com", "John Doe", "adminpass", "Admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_TicketChatID",
                 table: "Messages",
                 column: "TicketChatID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_CategoryID",
+                table: "Tickets",
+                column: "CategoryID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tickets_ConversationID",
@@ -128,13 +139,13 @@ namespace _.infrastructure.migrations
                 name: "Messages");
 
             migrationBuilder.DropTable(
-                name: "TicketCategories");
-
-            migrationBuilder.DropTable(
                 name: "Tickets");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "TicketCategories");
 
             migrationBuilder.DropTable(
                 name: "TicketChats");

@@ -10,13 +10,14 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 //inject Helpdesk Service into Scoped Lifetime
-
 builder.Services.AddSignalR();
 builder.Services.AddScoped<Helpdesk>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<Messenger>();
 builder.Services.AddScoped<AccountMaker>();
+builder.Services.AddScoped<FileUploader>();
+
 
 builder.Host.UseSerilog((context, services, config) =>
 {
@@ -43,6 +44,7 @@ var app = builder.Build();
 app.UseSerilogRequestLogging(); // log every incoming http requests
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapHelpdeskEndpoint();
 app.MapAuthenticationEndpoints();

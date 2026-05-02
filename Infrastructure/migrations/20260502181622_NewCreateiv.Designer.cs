@@ -11,8 +11,8 @@ using helpdesk.infrastructure;
 namespace _.infrastructure.migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20260501081932_newCreate")]
-    partial class newCreate
+    [Migration("20260502181622_NewCreateiv")]
+    partial class NewCreateiv
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,28 @@ namespace _.infrastructure.migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("helpdesk.DTOs.FileMetaData", b =>
+                {
+                    b.Property<string>("ID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("DownloadURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PathName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("FileMetaData");
+                });
 
             modelBuilder.Entity("helpdesk.Entities.Message", b =>
                 {
@@ -40,12 +62,12 @@ namespace _.infrastructure.migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TicketChatID")
+                    b.Property<string>("TicketID")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("MessageID");
 
-                    b.HasIndex("TicketChatID");
+                    b.HasIndex("TicketID");
 
                     b.ToTable("Messages");
                 });
@@ -61,13 +83,12 @@ namespace _.infrastructure.migrations
                     b.Property<int>("CategoryID")
                         .HasColumnType("int");
 
-                    b.Property<string>("ConversationID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileMetaDataID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Issuer")
                         .IsRequired()
@@ -80,7 +101,7 @@ namespace _.infrastructure.migrations
 
                     b.HasIndex("CategoryID");
 
-                    b.HasIndex("ConversationID");
+                    b.HasIndex("FileMetaDataID");
 
                     b.ToTable("Tickets");
                 });
@@ -119,23 +140,10 @@ namespace _.infrastructure.migrations
                         });
                 });
 
-            modelBuilder.Entity("helpdesk.Entities.TicketChat", b =>
-                {
-                    b.Property<string>("ID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("TicketChats");
-                });
-
             modelBuilder.Entity("helpdesk.Entities.User", b =>
                 {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -159,7 +167,7 @@ namespace _.infrastructure.migrations
                     b.HasData(
                         new
                         {
-                            UserId = 1,
+                            UserId = "Admin-userID",
                             Email = "user@admin.com",
                             FullName = "John Doe",
                             Password = "adminpass",
@@ -169,9 +177,9 @@ namespace _.infrastructure.migrations
 
             modelBuilder.Entity("helpdesk.Entities.Message", b =>
                 {
-                    b.HasOne("helpdesk.Entities.TicketChat", null)
-                        .WithMany("Messages")
-                        .HasForeignKey("TicketChatID");
+                    b.HasOne("helpdesk.Entities.Ticket", null)
+                        .WithMany("Conversation")
+                        .HasForeignKey("TicketID");
                 });
 
             modelBuilder.Entity("helpdesk.Entities.Ticket", b =>
@@ -182,20 +190,18 @@ namespace _.infrastructure.migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("helpdesk.Entities.TicketChat", "Conversation")
+                    b.HasOne("helpdesk.DTOs.FileMetaData", "FileMetaData")
                         .WithMany()
-                        .HasForeignKey("ConversationID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FileMetaDataID");
 
                     b.Navigation("Category");
 
-                    b.Navigation("Conversation");
+                    b.Navigation("FileMetaData");
                 });
 
-            modelBuilder.Entity("helpdesk.Entities.TicketChat", b =>
+            modelBuilder.Entity("helpdesk.Entities.Ticket", b =>
                 {
-                    b.Navigation("Messages");
+                    b.Navigation("Conversation");
                 });
 #pragma warning restore 612, 618
         }

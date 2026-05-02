@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using helpdesk.infrastructure;
 
@@ -10,9 +11,11 @@ using helpdesk.infrastructure;
 namespace _.infrastructure.migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20260502000213_NewCreateIII")]
+    partial class NewCreateIII
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,33 +23,6 @@ namespace _.infrastructure.migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("helpdesk.DTOs.FileMetaData", b =>
-                {
-                    b.Property<string>("ID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("DownloadURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PathName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TicketID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("TicketID");
-
-                    b.ToTable("Files");
-                });
 
             modelBuilder.Entity("helpdesk.Entities.Message", b =>
                 {
@@ -172,13 +148,6 @@ namespace _.infrastructure.migrations
                         });
                 });
 
-            modelBuilder.Entity("helpdesk.DTOs.FileMetaData", b =>
-                {
-                    b.HasOne("helpdesk.Entities.Ticket", null)
-                        .WithMany("FileMetaData")
-                        .HasForeignKey("TicketID");
-                });
-
             modelBuilder.Entity("helpdesk.Entities.Message", b =>
                 {
                     b.HasOne("helpdesk.Entities.Ticket", null)
@@ -200,8 +169,6 @@ namespace _.infrastructure.migrations
             modelBuilder.Entity("helpdesk.Entities.Ticket", b =>
                 {
                     b.Navigation("Conversation");
-
-                    b.Navigation("FileMetaData");
                 });
 #pragma warning restore 612, 618
         }

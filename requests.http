@@ -1,0 +1,62 @@
+### 
+GET http://localhost:5299/api/helpdesk/pending/tickets
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiSm9obiBEb2UiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2dpdmVubmFtZSI6ImFkbWlucGFzcyIsImV4cCI6MTc3Nzc1MDMwN30.37ntmv5DWRpc8WFRS7GPRPKCLEaIZNBtkl1fIRCJOUQ
+
+###
+GET http://localhost:5299/api/helpdesk/open/tickets
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiSm9obiBEb2UiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2dpdmVubmFtZSI6ImFkbWlucGFzcyIsImV4cCI6MTc3Nzc1MDMwN30.37ntmv5DWRpc8WFRS7GPRPKCLEaIZNBtkl1fIRCJOUQ
+###
+POST  http://localhost:5299/api/auth/login
+Content-Type: application/json
+
+{
+    "Email":"user@admin.com",
+    "Password":"adminpass"
+}
+
+### 
+POST  http://localhost:5299/api/auth/login
+Content-Type:application/json
+
+{
+    "Email":"user@account.com",
+    "Password":"pass123"
+}
+### 
+
+POST http://localhost:5299/api/helpdesk/admin/user@admin.com/open/ticket/ba827fce583d46cfacdaa9508580ca5e
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiSm9obiBEb2UiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2dpdmVubmFtZSI6ImFkbWlucGFzcyIsImV4cCI6MTc3Nzc1MDMwN30.37ntmv5DWRpc8WFRS7GPRPKCLEaIZNBtkl1fIRCJOUQ
+### 
+POST http://localhost:5299/api/helpdesk/send/message
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiSm9obiBEb2UiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2dpdmVubmFtZSI6ImFkbWlucGFzcyIsImV4cCI6MTc3Nzc1MDMwN30.37ntmv5DWRpc8WFRS7GPRPKCLEaIZNBtkl1fIRCJOUQ
+Content-Type: application/json
+
+{
+    "TicketID":"ba827fce583d46cfacdaa9508580ca5e",
+    "Sender":"user@account.com",
+    "Response":"Hold on, I will send a document shortly!"
+}
+
+###
+POST http://localhost:5299/api/helpdesk/ticket/ba827fce583d46cfacdaa9508580ca5e/file/upload
+Content-Type: multipart/form-data; boundary=Myboundary
+
+--Myboundary
+Content-Disposition:form-data; name="file"; filename="test.txt";
+Content-Type: text/plain;
+
+Hello World
+--Myboundary--
+
+
+###
+PATCH  http://localhost:5299/api/helpdesk/close/ticket/ba827fce583d46cfacdaa9508580ca5e
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiSm9obiBEb2UiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2dpdmVubmFtZSI6ImFkbWlucGFzcyIsImV4cCI6MTc3Nzc1NDMyMX0.rft0DzGsSPlnlL7u4RYoovKRFBTzJyH_tWgMxdzfb3o
+
+
+### 
+GET http://localhost:5299/api/helpdesk/guest/all/tickets
+
+### 
+GET http://localhost:5299/api/helpdesk/admin/all/tickets
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiSm9obiBEb2UiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2dpdmVubmFtZSI6ImFkbWlucGFzcyIsImV4cCI6MTc3Nzc2NTExNH0.rFb7DZrLsd3xSMQF33QLIMgZCrXTY0rnO7vHZGefGbg

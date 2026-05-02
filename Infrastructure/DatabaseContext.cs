@@ -1,4 +1,6 @@
+using helpdesk.DTOs;
 using helpdesk.Entities;
+using helpdesk.Helper;
 using Microsoft.EntityFrameworkCore;
 
 namespace helpdesk.infrastructure;
@@ -7,7 +9,8 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<Ticket> Tickets => Set<Ticket>();
-    public DbSet<TicketChat> TicketChats => Set<TicketChat>();
+
+    public DbSet<FileMetaData> Files => Set<FileMetaData>();
     public DbSet<Message> Messages => Set<Message>();
     public DbSet<TicketCategory> TicketCategories => Set<TicketCategory>();
 
@@ -19,7 +22,7 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
             new TicketCategory { ID = 3, Title = "Outlet Request Support" }
         );
         modelBuilder.Entity<User>().HasData(
-            new User {UserId=1, Email = "user@admin.com", Password = "adminpass", FullName = "John Doe", Role = "Admin" }
+            new User { UserId = "Admin-userID", Email = "user@admin.com", Password = "adminpass", FullName = "John Doe", Role = "Admin" }
         );
     }
 }
