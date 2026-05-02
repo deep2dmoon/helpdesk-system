@@ -30,11 +30,11 @@
 - Admin finalises and Close Ticket 
 
 ### API Endpoints
-[Login Endpoint](http://localhost:PORT/api/auth/login) [Email & Password]
+[Login](http://localhost:PORT/api/auth/login) [Email & Password]
 [Sign Up](http://localhost:PORT/api/auth/signup) [Fullname , Email, Password]
 [Create Ticket](http://localhost:PORT/api/helpdesk/new/ticket")
 [Open Ticket](http://localhost:5299/api/helpdesk/admin/admin@info.co/open/ticket/ticketID)
-[Open Close](http://localhost:5299/api/helpdesk//admin/close/ticket/ticketID)
+[Close Ticket](http://localhost:5299/api/helpdesk//admin/close/ticket/ticketID)
 [File Upload](http://localhost:5299/api/helpdesk/ticket/ticketID/file/upload)
 [Messaging](http://localhost:5299/api/helpdesk/send/message)
 
