@@ -3,7 +3,7 @@
 - This is an helpdesk system for a B2C Organization , it support the creation and Resolve of Tickets ( Issues , Complaints or Enquiries) between the Customers and the Business (Administrators). It Allows the real time chat and the upload of Ticket related dcouments or files.
 
 ## Architectural Design Approach
-- A Monolithic architecturing design approach was adopted, in which every components shared the same infrastucture and are tightly coupled into a deployable single codebase unit.
+- A Monolithic architectural design approach was adopted, in which every components shared the same infrastucture and are tightly coupled into a deployable single codebase unit.
 
 ### System Components
 
